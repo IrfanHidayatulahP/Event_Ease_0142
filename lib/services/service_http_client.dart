@@ -38,6 +38,23 @@ class ServiceHttpClient {
     return _inner.get(url, headers: headers);
   }
 
+  /// PUT dengan token (butuh autentikasi)
+  Future<http.Response> putWithToken(
+    String endpoint,
+    Map<String, dynamic> body,
+  ) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final headers = await _buildAuthHeaders();
+    return _inner.put(url, headers: headers, body: jsonEncode(body));
+  }
+
+  /// DELETE dengan token (butuh autentikasi)
+  Future<http.Response> deleteWithToken(String endpoint) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final headers = await _buildAuthHeaders();
+    return _inner.delete(url, headers: headers);
+  }
+
   /// Bangun header JSON + Bearer token jika ada
   Future<Map<String, String>> _buildAuthHeaders() async {
     final token = await _secureStorage.read(key: 'AuthToken');

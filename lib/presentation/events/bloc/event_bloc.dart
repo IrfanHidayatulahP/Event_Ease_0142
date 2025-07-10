@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:event_ease/data/model/request/eo/addEventRequest.dart';
-import 'package:event_ease/data/model/response/eo/getEventResponse.dart';
+import 'package:event_ease/data/model/request/eo/event/addEventRequest.dart';
+import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
 import 'package:event_ease/data/repository/eventRepository.dart';
 
 part 'event_event.dart';

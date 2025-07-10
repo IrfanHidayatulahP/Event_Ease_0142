@@ -18,7 +18,7 @@ class AuthRepository {
     LoginRequestModel req,
   ) async {
     try {
-      final resp = await _http.post('auth/login', req.toMap());
+      final resp = await _http.post('login', req.toMap());
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 200 && body['status'] == 'success') {
@@ -43,7 +43,7 @@ class AuthRepository {
   /// Register (tidak perlu simpan token)
   Future<Either<String, String>> register(RegisterRequestModel req) async {
     try {
-      final resp = await _http.post('auth/register', req.toMap());
+      final resp = await _http.post('register', req.toMap());
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 201 && body['status'] == 'success') {

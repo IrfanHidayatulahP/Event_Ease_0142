@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:event_ease/data/model/response/eo/getEventResponse.dart';
+import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
 import 'package:http/http.dart' as http;
 
 class EventApi {

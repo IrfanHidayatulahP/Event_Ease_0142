@@ -1,0 +1,79 @@
+import 'dart:convert';
+
+class AddOrderResponseModel {
+  final String? status;
+  final Data? data;
+
+  AddOrderResponseModel({this.status, this.data});
+
+  factory AddOrderResponseModel.fromJson(String str) =>
+      AddOrderResponseModel.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory AddOrderResponseModel.fromMap(Map<String, dynamic> json) =>
+      AddOrderResponseModel(
+        status: json["status"],
+        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+      );
+
+  Map<String, dynamic> toMap() => {"status": status, "data": data?.toMap()};
+}
+
+class Data {
+  final int? id;
+  final int? userId;
+  final int? tiketKategoriId;
+  final String? status;
+  final int? jumlahTiket;
+  final String? totalHarga;
+  final DateTime? tanggalPemesanan;
+  final DateTime? updatedAt;
+  final DateTime? createdAt;
+
+  Data({
+    this.id,
+    this.userId,
+    this.tiketKategoriId,
+    this.status,
+    this.jumlahTiket,
+    this.totalHarga,
+    this.tanggalPemesanan,
+    this.updatedAt,
+    this.createdAt,
+  });
+
+  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Data.fromMap(Map<String, dynamic> json) => Data(
+    id: json["id"],
+    userId: json["user_id"],
+    tiketKategoriId: json["tiket_kategori_id"],
+    status: json["status"],
+    jumlahTiket: json["jumlah_tiket"],
+    totalHarga: json["total_harga"],
+    tanggalPemesanan:
+        json["tanggal_pemesanan"] == null
+            ? null
+            : DateTime.parse(json["tanggal_pemesanan"]),
+    updatedAt:
+        json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+    createdAt:
+        json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+  );
+
+  Map<String, dynamic> toMap() => {
+    "id": id,
+    "user_id": userId,
+    "tiket_kategori_id": tiketKategoriId,
+    "status": status,
+    "jumlah_tiket": jumlahTiket,
+    "total_harga": totalHarga,
+    "tanggal_pemesanan":
+        "${tanggalPemesanan!.year.toString().padLeft(4, '0')}-${tanggalPemesanan!.month.toString().padLeft(2, '0')}-${tanggalPemesanan!.day.toString().padLeft(2, '0')}",
+    "updatedAt": updatedAt?.toIso8601String(),
+    "createdAt": createdAt?.toIso8601String(),
+  };
+}

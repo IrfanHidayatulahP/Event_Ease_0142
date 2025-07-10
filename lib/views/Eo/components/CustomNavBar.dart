@@ -1,4 +1,5 @@
 // lib/views/eo/widgets/custom_bottom_navbar.dart
+import 'package:event_ease/views/Eo/profile/profilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:event_ease/views/Eo/event/eventPage.dart';
 import 'package:event_ease/views/Eo/dashboardPage.dart'; // Pastikan import ini sesuai path kamu
@@ -11,7 +12,7 @@ class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({
     super.key,
     required this.selectedIndex,
-    required this.onItemSelected, 
+    required this.onItemSelected,
     required this.user,
   });
 
@@ -38,11 +39,7 @@ class CustomBottomNavBar extends StatelessWidget {
             onTap: () {
               onItemSelected(0);
               Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => DashboardPage(
-                    user: user,
-                  ),
-                ),
+                MaterialPageRoute(builder: (_) => DashboardPage(user: user)),
               );
             },
             child: Column(
@@ -54,7 +51,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   height: selectedIndex == 0 ? 48 : 40,
                   decoration: BoxDecoration(
                     color:
-                        selectedIndex == 0 ? Colors.deepOrange : Colors.transparent,
+                        selectedIndex == 0
+                            ? Colors.deepOrange
+                            : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -81,9 +80,9 @@ class CustomBottomNavBar extends StatelessWidget {
           GestureDetector(
             onTap: () {
               onItemSelected(1);
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => EventPage(user: user)),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => EventPage(user: user)));
             },
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -94,7 +93,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   height: selectedIndex == 1 ? 48 : 40,
                   decoration: BoxDecoration(
                     color:
-                        selectedIndex == 1 ? Colors.deepOrange : Colors.transparent,
+                        selectedIndex == 1
+                            ? Colors.deepOrange
+                            : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -129,7 +130,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   height: selectedIndex == 2 ? 48 : 40,
                   decoration: BoxDecoration(
                     color:
-                        selectedIndex == 2 ? Colors.deepOrange : Colors.transparent,
+                        selectedIndex == 2
+                            ? Colors.deepOrange
+                            : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -154,7 +157,12 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => onItemSelected(3),
+            onTap: () {
+              onItemSelected(3);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => ProfilePage(user: user)),
+              );
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -164,7 +172,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   height: selectedIndex == 3 ? 48 : 40,
                   decoration: BoxDecoration(
                     color:
-                        selectedIndex == 3 ? Colors.deepOrange : Colors.transparent,
+                        selectedIndex == 3
+                            ? Colors.deepOrange
+                            : Colors.transparent,
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

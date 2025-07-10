@@ -1,16 +1,18 @@
 // lib/views/eo/widgets/custom_bottom_navbar.dart
 import 'package:flutter/material.dart';
-import 'package:event_ease/views/Eo/eventPage.dart';
+import 'package:event_ease/views/Eo/event/eventPage.dart';
 import 'package:event_ease/views/Eo/dashboardPage.dart'; // Pastikan import ini sesuai path kamu
-import 'package:event_ease/data/model/auth/loginResponse.dart'; // Jika butuh Data user
+import 'package:event_ease/data/model/auth/loginResponse.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
+  final Data user;
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
   const CustomBottomNavBar({
     super.key,
     required this.selectedIndex,
-    required this.onItemSelected,
+    required this.onItemSelected, 
+    required this.user,
   });
 
   @override
@@ -38,7 +40,7 @@ class CustomBottomNavBar extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => DashboardPage(
-                    user: Data(), // Ganti Data() dengan user yang sesuai jika perlu
+                    user: user,
                   ),
                 ),
               );
@@ -80,7 +82,7 @@ class CustomBottomNavBar extends StatelessWidget {
             onTap: () {
               onItemSelected(1);
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => EventPage()),
+                MaterialPageRoute(builder: (_) => EventPage(user: user)),
               );
             },
             child: Column(

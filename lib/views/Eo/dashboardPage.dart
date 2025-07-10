@@ -31,7 +31,8 @@ class _DashboardPageState extends State<DashboardPage> {
       body: const BodyDashboard(),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
-        onItemSelected: (idx) => setState(() => _selectedIndex = idx),
+        onItemSelected: (idx) => setState(() => _selectedIndex = idx), 
+        user: widget.user,
       ),
     );
   }

@@ -1,3 +1,5 @@
+// lib/views/eo/event_page.dart
+
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
@@ -6,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EventPage extends StatefulWidget {
-  const EventPage({super.key});
+  final Data user;
+
+  const EventPage({super.key, required this.user});
 
   @override
   State<EventPage> createState() => _EventPageState();
@@ -24,7 +28,9 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(user: Data()), // Ganti Data() jika perlu
+      /// ← Pass the real user in here:
+      appBar: CustomAppBar(user: widget.user),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -80,7 +86,8 @@ class _EventPageState extends State<EventPage> {
                                     const SizedBox(width: 4),
                                     Text(
                                       event.startDate != null
-                                          ? '${event.startDate!.toLocal()}'.split(' ')[0]
+                                          ? '${event.startDate!.toLocal()}'
+                                              .split(' ')[0]
                                           : '-',
                                       style: const TextStyle(fontSize: 14),
                                     ),
@@ -113,9 +120,10 @@ class _EventPageState extends State<EventPage> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(
+        user: widget.user,
         selectedIndex: _selectedIndex,
         onItemSelected: (idx) {
-          // Navigasi ke halaman lain jika diperlukan
+          setState(() => _selectedIndex = idx);
         },
       ),
     );

@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-class EditProfileResponseModel {
+class DeleteProfileResponseModel {
   final String? status;
   final String? message;
 
-  EditProfileResponseModel({this.status, this.message});
+  DeleteProfileResponseModel({this.status, this.message});
 
-  factory EditProfileResponseModel.fromJson(String str) =>
-      EditProfileResponseModel.fromMap(json.decode(str));
+  factory DeleteProfileResponseModel.fromJson(String str) =>
+      DeleteProfileResponseModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory EditProfileResponseModel.fromMap(Map<String, dynamic> json) =>
-      EditProfileResponseModel(
+  factory DeleteProfileResponseModel.fromMap(Map<String, dynamic> json) =>
+      DeleteProfileResponseModel(
         status: json["status"],
         message: json["message"],
       );

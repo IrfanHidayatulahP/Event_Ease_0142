@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:event_ease/data/model/request/eo/profile/editProfileRequest.dart';
 import 'package:event_ease/data/model/response/eo/profile/deleteProfileResponse.dart';
 import 'package:event_ease/data/model/response/eo/profile/editProfileResponse.dart';
 import 'package:event_ease/data/model/response/eo/profile/getProfileResponse.dart';
@@ -29,19 +30,24 @@ class ProfileRepository {
 
   /// Update user profile (PUT /profile with token)
   Future<Either<String, EditProfileResponseModel>> updateProfile(
-    EditProfileResponseModel request,
+    EditProfileRequestModel model,
   ) async {
+    print('>>> updateProfile: start');
     try {
-      final resp = await _client.putWithToken('profile', request.toMap());
-      final body = json.decode(resp.body);
-
-      if (resp.statusCode == 200 && body['status'] == 'success') {
-        return Right(EditProfileResponseModel.fromMap(body));
+      final resp = await _client.putWithToken('profile/edit', model.toMap());
+      print('>>> HTTP status: ${resp.statusCode}');
+      if (resp.statusCode == 200) {
+        final jsonBody = json.decode(resp.body) as Map<String, dynamic>;
+        final data = EditProfileResponseModel.fromMap(jsonBody);
+        print('>>> parsed response OK');
+        return Right(data);
       } else {
-        return Left(body['message'] ?? 'Failed to update profile');
+        print('>>> error status: ${resp.statusCode}');
+        return Left('Server error: ${resp.statusCode}');
       }
-    } catch (e) {
-      return Left('Error updating profile: $e');
+    } catch (e, st) {
+      print('>>> exception: $e\n$st');
+      return Left('Exception: $e');
     }
   }
 

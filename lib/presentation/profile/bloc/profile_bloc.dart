@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:event_ease/data/model/response/eo/profile/editProfileResponse.dart';
+import 'package:event_ease/data/model/request/eo/profile/editProfileRequest.dart';
 import 'package:event_ease/data/repository/profileRepository.dart';
 
 part 'profile_event.dart';
@@ -36,21 +36,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     emit(ProfileLoading());
-    final result = await repo.updateProfile(
-      EditProfileResponseModel(
-        data:
-            event.username.isNotEmpty ||
-                    event.email.isNotEmpty ||
-                    event.photoPath.isNotEmpty
-                ? Data(
-                  username: event.username,
-                  email: event.email,
-                  photoPath: event.photoPath,
-                )
-                : null,
-        status: 'success',
-      ),
+    final requestModel = EditProfileRequestModel(
+      username: event.username,
+      email: event.email,
+      photoPath: event.photoPath,
     );
+    final result = await repo.updateProfile(requestModel);
+
     result.fold(
       (l) => emit(ProfileFailure(l)),
       (r) => emit(

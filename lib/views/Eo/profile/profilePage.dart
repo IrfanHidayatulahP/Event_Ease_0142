@@ -1,6 +1,7 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/profile/bloc/profile_bloc.dart';
 import 'package:event_ease/views/Eo/components/CustomNavBar.dart';
+import 'package:event_ease/views/Eo/profile/editProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,9 +30,14 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {
-              // Navigate to edit profile page
-              Navigator.pushNamed(context, '/editProfile');
+            onPressed: () async {
+              final updated = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(builder: (_) => const EditProfilePage()),
+              );
+              if (updated == true) {
+                context.read<ProfileBloc>().add(FetchProfileRequested());
+              }
             },
           ),
         ],
@@ -85,6 +91,15 @@ class _ProfilePageState extends State<ProfilePage> {
           setState(() => _selectedIndex = idx);
         },
       ),
+    );
+  }
+
+  Widget _buildProfile(ProfileLoadSuccess s) {
+    return Column(
+      children: [
+        Text('Username: ${s.username}'),
+        Text('Email: ${s.email}'),
+      ],
     );
   }
 }

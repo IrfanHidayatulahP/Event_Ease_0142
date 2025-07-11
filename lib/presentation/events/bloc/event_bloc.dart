@@ -14,6 +14,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     on<FetchEventsRequested>(_onFetch);
     on<AddEventRequested>(_onAdd);
     on<UpdateEventRequested>(_onUpdate);
+    on<DeleteEventRequested>(_onDelete);
   }
 
   Future<void> _onFetch(
@@ -76,6 +77,18 @@ class EventBloc extends Bloc<EventEvent, EventState> {
       );
 
       emit(EventUpdateSuccess(updatedDatum));
+      add(FetchEventsRequested());
+    });
+  }
+
+  Future<void> _onDelete(
+    DeleteEventRequested event,
+    Emitter<EventState> emit,
+  ) async {
+    emit(EventLoading());
+    final result = await repo.deleteEvent(event.eventId);
+    result.fold((l) => emit(EventFailure(l)), (r) {
+      emit(EventDeleteSuccess(event.eventId));
       add(FetchEventsRequested());
     });
   }

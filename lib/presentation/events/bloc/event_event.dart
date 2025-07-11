@@ -29,3 +29,8 @@ class UpdateEventRequested extends EventEvent {
     required this.eventId,
   });
 }
+
+class DeleteEventRequested extends EventEvent {
+  final String eventId;
+  DeleteEventRequested({required this.eventId});
+}

@@ -26,6 +26,10 @@ final class EventUpdateSuccess extends EventState {
   EventUpdateSuccess(this.editEvent);
 }
 
+final class EventDeleteSuccess extends EventState {
+  final String deletedId;
+  EventDeleteSuccess(this.deletedId);
+}
 
 /// Terjadi error pada fetch atau add
 final class EventFailure extends EventState {

@@ -83,6 +83,44 @@ class _EventDetailPageState extends State<EventDetailPage> {
     }
   }
 
+  Future<void> _onDeletePressed() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text('Delete Event'),
+            content: const Text('Are you sure you want to delete this event?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+    );
+    if (confirmed != true) return;
+
+    final bloc = context.read<EventBloc>();
+    bloc.add(DeleteEventRequested(eventId: _event.id.toString()));
+
+    await for (final state in bloc.stream) {
+      if (state is EventDeleteSuccess) {
+        Navigator.pop(context, true); // kembali ke daftar
+        break;
+      }
+      if (state is EventFailure) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${state.error}')));
+        break;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,6 +131,11 @@ class _EventDetailPageState extends State<EventDetailPage> {
             icon: const Icon(Icons.refresh),
             onPressed: _onRefreshPressed,
             tooltip: 'Refresh data',
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: _onDeletePressed,
+            tooltip: 'Delete',
           ),
         ],
       ),

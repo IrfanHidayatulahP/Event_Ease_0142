@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:event_ease/data/model/request/eo/event/addEventRequest.dart';
+import 'package:event_ease/data/model/request/eo/event/editEventRequest.dart';
 import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
 import 'package:event_ease/data/repository/eventRepository.dart';
 
@@ -12,6 +13,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
   EventBloc(this.repo) : super(EventInitial()) {
     on<FetchEventsRequested>(_onFetch);
     on<AddEventRequested>(_onAdd);
+    on<UpdateEventRequested>(_onUpdate);
   }
 
   Future<void> _onFetch(
@@ -22,7 +24,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     final result = await repo.fetchEvents();
     result.fold(
       (l) => emit(EventFailure(l)),
-      (r) => emit(EventLoadSuccess(r.data ?? [])), // ✅ ambil list event-nya
+      (r) => emit(EventLoadSuccess(r.data ?? [])),
     );
   }
 
@@ -30,22 +32,50 @@ class EventBloc extends Bloc<EventEvent, EventState> {
     emit(EventLoading());
     final result = await repo.addEvent(event.request);
     result.fold((l) => emit(EventFailure(l)), (r) {
-      // r is AddEventResponse
-      final addData = r;
-      // map AddEventResponse.Data → Datum
       final newDatum = Datum(
-        id: addData.data?.id,
-        nama: addData.data?.nama,
-        deskripsi: addData.data?.deskripsi,
-        startDate: addData.data?.startDate,
-        endDate: addData.data?.endDate,
-        lokasi: addData.data?.lokasi,
-        createdAt: addData.data?.createdAt, // dynamic in Datum
+        id: r.data?.id,
+        nama: r.data?.nama,
+        deskripsi: r.data?.deskripsi,
+        startDate: r.data?.startDate,
+        endDate: r.data?.endDate,
+        lokasi: r.data?.lokasi,
+        createdAt: r.data?.createdAt,
+      );
+      emit(EventAddSuccess(newDatum));
+      add(FetchEventsRequested());
+    });
+  }
+
+  Future<void> _onUpdate(
+    UpdateEventRequested event,
+    Emitter<EventState> emit,
+  ) async {
+    emit(EventLoading());
+
+    final req = EditEventRequestModel(
+      nama: event.nama,
+      deskripsi: event.deskripsi,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      lokasi: event.lokasi,
+    );
+
+    final result = await repo.updateEvent(event.eventId, req);
+
+    result.fold((l) => emit(EventFailure(l)), (r) {
+      // r is EditEventResponseModel
+      final d = r.data!;
+      final updatedDatum = Datum(
+        id: int.parse(event.eventId),
+        nama: d.nama,
+        deskripsi: d.deskripsi,
+        startDate: d.startDate,
+        endDate: d.endDate,
+        lokasi: d.lokasi,
+        createdAt: event.startDate,
       );
 
-      emit(EventAddSuccess(newDatum));
-
-      // reload list
+      emit(EventUpdateSuccess(updatedDatum));
       add(FetchEventsRequested());
     });
   }

@@ -20,6 +20,13 @@ final class EventAddSuccess extends EventState {
   EventAddSuccess(this.newEvent);
 }
 
+/// Event berhasil di-update
+final class EventUpdateSuccess extends EventState {
+  final Datum editEvent;
+  EventUpdateSuccess(this.editEvent);
+}
+
+
 /// Terjadi error pada fetch atau add
 final class EventFailure extends EventState {
   final String error;

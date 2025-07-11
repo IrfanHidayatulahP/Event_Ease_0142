@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:event_ease/data/model/request/eo/event/addEventRequest.dart';
 import 'package:event_ease/data/model/request/eo/event/editEventRequest.dart';
 import 'package:event_ease/data/model/response/eo/event/addEventResponse.dart';
+import 'package:event_ease/data/model/response/eo/event/editEventResponse.dart';
 import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
 import 'package:event_ease/services/service_http_client.dart';
 
@@ -11,7 +12,7 @@ class EventRepository {
   final ServiceHttpClient _client;
   EventRepository(this._client);
 
-  /// Fetch all events (GET /events)
+  /// Fetch all events (GET /event)
   Future<Either<String, EventResponseModel>> fetchEvents() async {
     try {
       final resp = await _client.get('event');
@@ -27,7 +28,7 @@ class EventRepository {
     }
   }
 
-  /// Tambah event (POST /events with token)
+  /// Tambah event (POST /event/add)
   Future<Either<String, AddEventResponse>> addEvent(AddEventRequest req) async {
     try {
       final resp = await _client.postWithToken('event/add', req.toMap());
@@ -43,30 +44,17 @@ class EventRepository {
     }
   }
 
-  /// Fetch event by ID (GET /events/{id})
-  Future<Either<String, EventResponseModel>> fetchEventById(String id) async {
+  /// Update event (PUT /event/edit/{id})
+  Future<Either<String, EditEventResponseModel>> updateEvent(
+    String id,
+    EditEventRequestModel req,
+  ) async {
     try {
-      final resp = await _client.get('event/$id');
+      final resp = await _client.putWithToken('event/edit/$id', req.toMap());
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 200 && body['status'] == 'success') {
-        return Right(EventResponseModel.fromMap(body));
-      } else {
-        return Left(body['message'] ?? 'Gagal memuat event');
-      }
-    } catch (e) {
-      return Left('Error fetching event by ID: $e');
-    }
-  }
-
-  /// Update event (PUT /events/{id} with token)
-  Future<Either<String, EventResponseModel>> updateEvent(String id, EditEventRequestModel req) async {
-    try {
-      final resp = await _client.putWithToken('event/$id', req.toMap());
-      final body = json.decode(resp.body);
-
-      if (resp.statusCode == 200 && body['status'] == 'success') {
-        return Right(EventResponseModel.fromMap(body));
+        return Right(EditEventResponseModel.fromMap(body));
       } else {
         return Left(body['message'] ?? 'Gagal memperbarui event');
       }
@@ -75,7 +63,7 @@ class EventRepository {
     }
   }
 
-  /// Delete event (DELETE /events/{id} with token)
+  /// Delete event (DELETE /event/{id})
   Future<Either<String, String>> deleteEvent(String id) async {
     try {
       final resp = await _client.deleteWithToken('event/$id');

@@ -30,7 +30,7 @@ class EventRepository {
   /// Tambah event (POST /events with token)
   Future<Either<String, AddEventResponse>> addEvent(AddEventRequest req) async {
     try {
-      final resp = await _client.postWithToken('event', req.toMap());
+      final resp = await _client.postWithToken('event/add', req.toMap());
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 201 && body['status'] == 'success') {

@@ -4,6 +4,7 @@ import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
 import 'package:event_ease/views/Eo/components/CustomNavBar.dart';
+import 'package:event_ease/views/Eo/event/createEventPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,9 +37,24 @@ class _EventPageState extends State<EventPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'My Events',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                const Text(
+                  'My Events',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Expanded(
+                  child: IconButton(
+                    icon: const Icon(Icons.add_circle_outline, size: 28),
+                    onPressed: () {
+                      // Navigate to create event page
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) => CreateEventPage(),
+                      ));
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Expanded(

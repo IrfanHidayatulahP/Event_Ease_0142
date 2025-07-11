@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class GetAllOrderResponseModel {
   final String? status;
-  final List<Datum>? data;
+  final List<Order>? data;
 
   GetAllOrderResponseModel({this.status, this.data});
 
@@ -17,7 +17,7 @@ class GetAllOrderResponseModel {
         data:
             json["data"] == null
                 ? []
-                : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+                : List<Order>.from(json["data"]!.map((x) => Order.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -26,7 +26,7 @@ class GetAllOrderResponseModel {
   };
 }
 
-class Datum {
+class Order {
   final int? id;
   final int? userId;
   final int? tiketKategoriId;
@@ -37,7 +37,7 @@ class Datum {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
-  Datum({
+  Order({
     this.id,
     this.userId,
     this.tiketKategoriId,
@@ -49,11 +49,11 @@ class Datum {
     this.updatedAt,
   });
 
-  factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
+  factory Order.fromJson(String str) => Order.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Datum.fromMap(Map<String, dynamic> json) => Datum(
+  factory Order.fromMap(Map<String, dynamic> json) => Order(
     id: json["id"],
     userId: json["user_id"],
     tiketKategoriId: json["tiket_kategori_id"],

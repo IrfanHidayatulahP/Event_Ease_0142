@@ -1,4 +1,5 @@
 // lib/views/eo/widgets/event_card.dart
+import 'package:event_ease/views/Eo/event/eventDetailPage.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
@@ -19,7 +20,12 @@ class EventCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: () {
-          // Navigator.push(...);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailPage(event: event),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(16),

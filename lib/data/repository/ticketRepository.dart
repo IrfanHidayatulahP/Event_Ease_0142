@@ -14,9 +14,9 @@ class TicketRepository {
   TicketRepository(this._client);
 
   /// Fetch all tickets (GET /tickets)
-  Future<Either<String, GetTicketByEventResponseModel>> fetchTickets() async {
+  Future<Either<String, GetTicketByEventResponseModel>> fetchTickets(String eventId) async {
     try {
-      final resp = await _client.get('tickets');
+      final resp = await _client.get('event/$eventId/tickets');
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 200 && body['status'] == 'success') {

@@ -3,10 +3,12 @@ import 'package:event_ease/data/repository/authRepository.dart';
 import 'package:event_ease/data/repository/eventRepository.dart';
 import 'package:event_ease/data/repository/orderRepository.dart';
 import 'package:event_ease/data/repository/profileRepository.dart';
+import 'package:event_ease/data/repository/ticketRepository.dart';
 import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 import 'package:event_ease/presentation/order/bloc/order_bloc.dart';
 import 'package:event_ease/presentation/profile/bloc/profile_bloc.dart';
+import 'package:event_ease/presentation/ticket/bloc/ticket_bloc.dart';
 import 'package:event_ease/services/service_http_client.dart';
 import 'package:event_ease/views/loginPage.dart';
 import 'package:event_ease/views/Eo/dashboardPage.dart';
@@ -26,23 +28,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AuthBloc(
-          authRepository: AuthRepository(serviceHttpClient))),
-        BlocProvider(create: (_) => EventBloc(
-          EventRepository(serviceHttpClient))),
-        BlocProvider(create: (_) => ProfileBloc(
-          ProfileRepository(serviceHttpClient))),
-          BlocProvider(create: (_) => OrderBloc(
-            OrderRepository(serviceHttpClient),
-          ))
+        BlocProvider(
+          create:
+              (_) =>
+                  AuthBloc(authRepository: AuthRepository(serviceHttpClient)),
+        ),
+        BlocProvider(
+          create: (_) => EventBloc(EventRepository(serviceHttpClient)),
+        ),
+        BlocProvider(
+          create: (_) => ProfileBloc(ProfileRepository(serviceHttpClient)),
+        ),
+        BlocProvider(
+          create: (_) => OrderBloc(OrderRepository(serviceHttpClient)),
+        ),
+        BlocProvider(
+          create: (_) => TicketBloc(TicketRepository(serviceHttpClient)),
+        ),
       ],
       child: MaterialApp(
         title: 'Event Ease',
-        theme: ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+        theme: ThemeData.from(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
         initialRoute: '/login',
-        routes: {
-          '/login': (ctx) => const LoginPage(),
-        },
+        routes: {'/login': (ctx) => const LoginPage()},
         onGenerateRoute: (settings) {
           if (settings.name == '/dashboard') {
             final args = settings.arguments;
@@ -53,9 +63,7 @@ class MyApp extends StatelessWidget {
               );
             }
             // Jika tidak ada user, bisa redirect ke login atau tampilkan error
-            return MaterialPageRoute(
-              builder: (_) => const LoginPage(),
-            );
+            return MaterialPageRoute(builder: (_) => const LoginPage());
           }
           return null; // fallback ke routes biasa
         },

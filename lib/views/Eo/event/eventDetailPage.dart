@@ -1,6 +1,8 @@
 // lib/views/eo/event/eventDetailPage.dart
 import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
+import 'package:event_ease/presentation/ticket/bloc/ticket_bloc.dart';
 import 'package:event_ease/views/Eo/event/editEventPage.dart';
+import 'package:event_ease/views/Eo/ticket/ticketPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -187,6 +189,25 @@ class _EventDetailPageState extends State<EventDetailPage> {
             Text(
               'Location: ${_event.lokasi ?? 'No location specified'}',
               style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            Center(
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.confirmation_num),
+                label: const Text('View Tickets'),
+                onPressed: () {
+                  final bloc = context.read<TicketBloc>();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (_) => BlocProvider.value(
+                            value: bloc,
+                            child: TicketPage(eventId: _event.id!),
+                          ),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

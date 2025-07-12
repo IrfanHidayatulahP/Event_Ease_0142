@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:event_ease/data/model/request/eo/orders/addOrderRequest.dart';
+import 'package:event_ease/data/model/request/eo/orders/editOrderRequest.dart';
 import 'package:event_ease/data/model/response/eo/orders/addOrderResponse.dart';
 import 'package:event_ease/data/model/response/eo/orders/deleteOrderResponse.dart';
 import 'package:event_ease/data/model/response/eo/orders/editOrderResponse.dart';
@@ -86,7 +87,7 @@ class OrderRepository {
   /// Update order by ID (PUT /orders/{id} with token)
   Future<Either<String, EditOrderResponseModel>> updateOrder(
     String id,
-    AddOrderRequestModel request,
+    EditOrderRequestModel request,
   ) async {
     try {
       final resp = await _client.putWithToken('orders/$id', request.toMap());

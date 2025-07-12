@@ -57,7 +57,7 @@ class _OrderPageState extends State<OrderPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailOrderPage(order: order),
+                        builder: (context) => DetailOrderPage(order: order, initialOrder: order),
                       ),
                     );
                   },

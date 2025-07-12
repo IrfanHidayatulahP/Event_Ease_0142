@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:event_ease/data/model/request/eo/orders/addOrderRequest.dart';
 import 'package:event_ease/data/model/request/eo/orders/editOrderRequest.dart';
 import 'package:event_ease/data/model/response/eo/orders/getAllOrdersResponse.dart';
 import 'package:event_ease/data/repository/orderRepository.dart';
@@ -34,6 +33,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     emit(OrderLoading());
 
+    // Buat request edit berdasarkan model yang benar
     final req = EditOrderRequestModel(
       userId: event.userId,
       tiketKategoriId: event.tiketKategoriId,
@@ -43,9 +43,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       totalHarga: event.totalHarga.toString(),
     );
 
-    final result = await repo.updateOrder(event.orderId.toString(), req as AddOrderRequestModel);
+    // Panggil updateOrder dengan EditOrderRequestModel, bukan cast aneh‑aneh
+    final result = await repo.updateOrder(
+      event.orderId.toString(),
+      req,
+    );
+
     result.fold(
-      (failure) => emit(OrderFailure(failure)),
+      (failure) {
+        emit(OrderFailure(failure));
+      },
       (response) {
         final d = response.data!;
         final updatedOrder = Order(
@@ -59,8 +66,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         );
 
         emit(OrderUpdateSuccess(updatedOrder));
-        // fetch ulang setelah update
-        add(FetchOrderRequested());
       },
     );
   }
@@ -71,13 +76,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   ) async {
     emit(OrderLoading());
     final result = await repo.deleteOrder(event.orderId);
-    result.fold(
-      (failure) => emit(OrderFailure(failure)),
-      (_) {
-        emit(OrderDeleteSuccess(event.orderId));
-        // fetch ulang setelah delete
-        add(FetchOrderRequested());
-      },
-    );
+    result.fold((failure) => emit(OrderFailure(failure)), (_) {
+      emit(OrderDeleteSuccess(event.orderId));
+      // fetch ulang setelah delete
+      add(FetchOrderRequested());
+    });
   }
 }

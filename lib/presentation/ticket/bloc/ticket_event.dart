@@ -8,8 +8,8 @@ class FetchTicketRequest extends TicketEvent {
 }
 
 class AddTicketRequested extends TicketEvent {
-  final AddTicketRequested request;
-  AddTicketRequested(this.request);
+  final AddTicketByEventRequestModel newTicket;
+  AddTicketRequested(this.newTicket);
 }
 
 class UpdateTicketRequested extends TicketEvent {
@@ -32,5 +32,6 @@ class UpdateTicketRequested extends TicketEvent {
 
 class DeleteTicketRequested extends TicketEvent {
   final String ticketId;
-  DeleteTicketRequested({required this.ticketId});
+  final String eventId;
+  DeleteTicketRequested({required this.ticketId, required this.eventId});
 }

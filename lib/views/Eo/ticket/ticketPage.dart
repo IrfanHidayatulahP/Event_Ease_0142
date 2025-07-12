@@ -1,4 +1,6 @@
+import 'package:event_ease/data/model/response/eo/tickets/getTicketByEventResponse.dart';
 import 'package:event_ease/presentation/ticket/bloc/ticket_bloc.dart';
+import 'package:event_ease/views/eo/ticket/addTicketPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,8 +16,9 @@ class _TicketPageState extends State<TicketPage> {
   @override
   void initState() {
     super.initState();
-    // Dispatch fetch tickets for this event
-    context.read<TicketBloc>().add(FetchTicketRequest(widget.eventId.toString()));
+    context.read<TicketBloc>().add(
+      FetchTicketRequest(widget.eventId.toString()),
+    );
   }
 
   @override
@@ -27,9 +30,7 @@ class _TicketPageState extends State<TicketPage> {
           if (state is TicketLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is TicketLoadSuccess) {
-            final tickets = state.ticket
-                .where((t) => t.eventId == widget.eventId)
-                .toList();
+            final tickets = state.ticket;
             if (tickets.isEmpty) {
               return const Center(child: Text('No tickets available.'));
             }
@@ -37,23 +38,42 @@ class _TicketPageState extends State<TicketPage> {
               padding: const EdgeInsets.all(16),
               itemCount: tickets.length,
               separatorBuilder: (_, __) => const Divider(),
-              itemBuilder: (context, index) {
-                final t = tickets[index];
+              itemBuilder: (ctx, i) {
+                final t = tickets[i];
                 return ListTile(
                   title: Text(t.nama ?? '-'),
                   subtitle: Text(
-                    'Price: \$${t.harga}\nQuota: ${t.kuotaTotal}  Available: ${t.kuotaTersedia}',
+                    'Price: ${t.harga} | Available: ${t.kuotaTersedia}',
                   ),
-                  isThreeLine: true,
                 );
               },
             );
           } else if (state is TicketFailure) {
             return Center(child: Text('Error: ${state.error}'));
-          } else {
-            return const SizedBox.shrink();
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final newTicket = await Navigator.push<Datum>(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (_) => BlocProvider.value(
+                    value: context.read<TicketBloc>(),
+                    child: AddTicketPage(eventId: widget.eventId),
+                  ),
+            ),
+          );
+          if (newTicket != null) {
+            // refresh daftar setelah berhasil tambah
+            context.read<TicketBloc>().add(
+              FetchTicketRequest(widget.eventId.toString()),
+            );
           }
         },
+        child: const Icon(Icons.add),
       ),
     );
   }

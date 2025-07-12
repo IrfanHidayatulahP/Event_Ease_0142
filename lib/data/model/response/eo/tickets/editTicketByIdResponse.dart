@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class EditTicketByIdResponseModel {
   final String? status;
-  final Data? data;
+  final Edit? data;
 
   EditTicketByIdResponseModel({this.status, this.data});
 
@@ -14,13 +14,13 @@ class EditTicketByIdResponseModel {
   factory EditTicketByIdResponseModel.fromMap(Map<String, dynamic> json) =>
       EditTicketByIdResponseModel(
         status: json["status"],
-        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+        data: json["data"] == null ? null : Edit.fromMap(json["data"]),
       );
 
   Map<String, dynamic> toMap() => {"status": status, "data": data?.toMap()};
 }
 
-class Data {
+class Edit {
   final int? id;
   final int? eventId;
   final String? nama;
@@ -28,7 +28,7 @@ class Data {
   final int? kuotaTotal;
   final int? kuotaTersedia;
 
-  Data({
+  Edit({
     this.id,
     this.eventId,
     this.nama,
@@ -37,11 +37,11 @@ class Data {
     this.kuotaTersedia,
   });
 
-  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+  factory Edit.fromJson(String str) => Edit.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Data.fromMap(Map<String, dynamic> json) => Data(
+  factory Edit.fromMap(Map<String, dynamic> json) => Edit(
     id: json["id"],
     eventId: json["event_id"],
     nama: json["nama"],

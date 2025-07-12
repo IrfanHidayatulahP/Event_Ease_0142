@@ -22,6 +22,37 @@ class _TicketPageState extends State<TicketPage> {
     );
   }
 
+  void _deleteTicket(Datum ticket) {
+    showDialog(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Hapus Tiket'),
+            content: Text(
+              'Apakah kamu yakin ingin menghapus tiket "${ticket.nama}"?',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Batal'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(ctx); // Tutup dialog
+                  context.read<TicketBloc>().add(
+                    DeleteTicketRequested(
+                      ticketId: ticket.id.toString(),
+                      eventId: widget.eventId.toString(),
+                    ),
+                  );
+                },
+                child: const Text('Hapus'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,25 +77,34 @@ class _TicketPageState extends State<TicketPage> {
                   subtitle: Text(
                     'Price: ${t.harga} | Available: ${t.kuotaTersedia}',
                   ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () async {
-                      final updatedTicket = await Navigator.push<Datum>(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (_) => BlocProvider.value(
-                                value: context.read<TicketBloc>(),
-                                child: EditTicketPage(ticket: t),
-                              ),
-                        ),
-                      );
-                      if (updatedTicket != null) {
-                        context.read<TicketBloc>().add(
-                          FetchTicketRequest(widget.eventId.toString()),
-                        );
-                      }
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () async {
+                          final updatedTicket = await Navigator.push<Datum>(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => BlocProvider.value(
+                                    value: context.read<TicketBloc>(),
+                                    child: EditTicketPage(ticket: t),
+                                  ),
+                            ),
+                          );
+                          if (updatedTicket != null) {
+                            context.read<TicketBloc>().add(
+                              FetchTicketRequest(widget.eventId.toString()),
+                            );
+                          }
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteTicket(t),
+                      ),
+                    ],
                   ),
                 );
               },
@@ -88,7 +128,6 @@ class _TicketPageState extends State<TicketPage> {
             ),
           );
           if (newTicket != null) {
-            // refresh daftar setelah berhasil tambah
             context.read<TicketBloc>().add(
               FetchTicketRequest(widget.eventId.toString()),
             );

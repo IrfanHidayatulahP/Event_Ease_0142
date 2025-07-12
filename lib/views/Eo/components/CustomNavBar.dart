@@ -1,4 +1,5 @@
 // lib/views/eo/widgets/custom_bottom_navbar.dart
+import 'package:event_ease/views/Eo/Order/orderPage.dart';
 import 'package:event_ease/views/Eo/profile/profilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:event_ease/views/Eo/event/eventPage.dart';
@@ -120,7 +121,12 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () => onItemSelected(2),
+            onTap: () {
+              onItemSelected(2);
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => OrderPage(user: user)));
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -143,7 +149,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Riwayat',
+                  'Riwayat Order',
                   style: TextStyle(
                     color: selectedIndex == 2 ? Colors.white : Colors.white70,
                     fontSize: 12,

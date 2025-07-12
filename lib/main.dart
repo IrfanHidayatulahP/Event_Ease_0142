@@ -1,9 +1,11 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/data/repository/authRepository.dart';
 import 'package:event_ease/data/repository/eventRepository.dart';
+import 'package:event_ease/data/repository/orderRepository.dart';
 import 'package:event_ease/data/repository/profileRepository.dart';
 import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
+import 'package:event_ease/presentation/order/bloc/order_bloc.dart';
 import 'package:event_ease/presentation/profile/bloc/profile_bloc.dart';
 import 'package:event_ease/services/service_http_client.dart';
 import 'package:event_ease/views/loginPage.dart';
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
           EventRepository(serviceHttpClient))),
         BlocProvider(create: (_) => ProfileBloc(
           ProfileRepository(serviceHttpClient))),
+          BlocProvider(create: (_) => OrderBloc(
+            OrderRepository(serviceHttpClient),
+          ))
       ],
       child: MaterialApp(
         title: 'Event Ease',

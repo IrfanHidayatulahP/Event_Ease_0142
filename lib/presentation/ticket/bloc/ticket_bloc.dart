@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:event_ease/data/model/request/eo/tickets/addTicketByEventRequest.dart';
 import 'package:event_ease/data/model/request/eo/tickets/editTicketByIdRequest.dart';
-import 'package:event_ease/data/model/response/eo/tickets/editTicketByIdResponse.dart';
 import 'package:event_ease/data/model/response/eo/tickets/getTicketByEventResponse.dart';
 import 'package:event_ease/data/repository/ticketRepository.dart';
 
@@ -75,7 +74,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
 
     final result = await repo.updateTicket(
       ticket.ticketId.toString(),
-      req as EditTicketByIdResponseModel,
+      req,
     );
 
     result.fold(
@@ -92,7 +91,7 @@ class TicketBloc extends Bloc<TicketEvent, TicketState> {
           kuotaTotal: d.kuotaTotal,
           kuotaTersedia: d.kuotaTersedia,
         );
-        emit(TicketUpdateSuccess(updateTicket as Edit));
+        emit(TicketUpdateSuccess(updateTicket));
       },
     );
   }

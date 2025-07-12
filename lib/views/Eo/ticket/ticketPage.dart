@@ -1,5 +1,6 @@
 import 'package:event_ease/data/model/response/eo/tickets/getTicketByEventResponse.dart';
 import 'package:event_ease/presentation/ticket/bloc/ticket_bloc.dart';
+import 'package:event_ease/views/Eo/ticket/editTicketPage.dart';
 import 'package:event_ease/views/eo/ticket/addTicketPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,6 +45,26 @@ class _TicketPageState extends State<TicketPage> {
                   title: Text(t.nama ?? '-'),
                   subtitle: Text(
                     'Price: ${t.harga} | Available: ${t.kuotaTersedia}',
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () async {
+                      final updatedTicket = await Navigator.push<Datum>(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (_) => BlocProvider.value(
+                                value: context.read<TicketBloc>(),
+                                child: EditTicketPage(ticket: t),
+                              ),
+                        ),
+                      );
+                      if (updatedTicket != null) {
+                        context.read<TicketBloc>().add(
+                          FetchTicketRequest(widget.eventId.toString()),
+                        );
+                      }
+                    },
                   ),
                 );
               },

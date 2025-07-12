@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:event_ease/data/model/request/eo/tickets/addTicketByEventRequest.dart';
+import 'package:event_ease/data/model/request/eo/tickets/editTicketByIdRequest.dart';
 import 'package:event_ease/data/model/response/eo/tickets/addTicketByEventResponse.dart';
 import 'package:event_ease/data/model/response/eo/tickets/deleteTicketByIdResponse.dart';
 import 'package:event_ease/data/model/response/eo/tickets/editTicketByIdResponse.dart';
@@ -87,7 +88,7 @@ class TicketRepository {
   /// Update ticket by ID (PUT /tickets/{id} with token)
   Future<Either<String, EditTicketByIdResponseModel>> updateTicket(
     String id,
-    EditTicketByIdResponseModel request,
+    EditTicketByIdRequestModel request,
   ) async {
     try {
       final resp = await _client.putWithToken('tickets/$id', request.toMap());

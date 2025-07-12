@@ -17,7 +17,7 @@ final class TicketAddSuccess extends TicketState {
 }
 
 final class TicketUpdateSuccess extends TicketState {
-  final Edit editTicket;
+  final Datum editTicket;
   TicketUpdateSuccess(this.editTicket);
 }
 

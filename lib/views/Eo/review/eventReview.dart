@@ -20,6 +20,35 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
+  void _onDeleteReview(int reviewId) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => AlertDialog(
+            title: const Text('Delete Review'),
+            content: const Text('Are you sure you want to delete this review?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                  context.read<ReviewBloc>().add(
+                    DeleteReviewRequest(
+                      reviewId: reviewId,
+                      eventId: widget.eventId,
+                    ),
+                  );
+                },
+                child: const Text('Delete'),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,6 +70,10 @@ class _ReviewPageState extends State<ReviewPage> {
                   leading: CircleAvatar(child: Text(review.userId.toString())),
                   title: Text('Rating: ${review.rating.toString()}'),
                   subtitle: Text(review.comment ?? '-'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => _onDeleteReview(review.id!),
+                  ),
                 );
               },
             );

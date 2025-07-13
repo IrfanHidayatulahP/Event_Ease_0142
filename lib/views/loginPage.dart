@@ -1,6 +1,7 @@
 import 'package:event_ease/data/model/auth/loginRequest.dart';
 import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
 import 'package:event_ease/views/Eo/dashboardPage.dart';
+import 'package:event_ease/views/User/userHomePage.dart';
 import 'package:event_ease/views/registerPage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +94,6 @@ class _LoginPageState extends State<LoginPage> {
                               : null,
                 ),
                 const SizedBox(height: 20),
-
                 // Login button with BLoC
                 BlocConsumer<AuthBloc, AuthState>(
                   listener: (context, state) {
@@ -102,20 +102,30 @@ class _LoginPageState extends State<LoginPage> {
                         context,
                       ).showSnackBar(SnackBar(content: Text(state.error)));
                     } else if (state is AuthSuccess) {
-                      // Show success message
+                      final user = state.responseModel.user!;
+                      final role = user.role?.toUpperCase();
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Login berhasil',
+                        const SnackBar(content: Text('Login berhasil')),
+                      );
+
+                      if (role == 'EO') {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => DashboardPage(user: user),
                           ),
-                        ),
-                      );
-                      // Navigate to dashboard and clear back stack
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => DashboardPage(user: state.responseModel.user!),
-                        ),
-                      );
+                        );
+                      } else if (role == 'USER') {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => const UserHomePage(),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Role tidak dikenali')),
+                        );
+                      }
                     }
                   },
                   builder: (context, state) {
@@ -143,7 +153,6 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   },
                 ),
-
                 const SizedBox(height: 20),
                 Text.rich(
                   TextSpan(
@@ -158,14 +167,15 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const Registerpage(),
-                              ),
-                            );
-                          },
+                        recognizer:
+                            TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const Registerpage(),
+                                  ),
+                                );
+                              },
                       ),
                     ],
                   ),

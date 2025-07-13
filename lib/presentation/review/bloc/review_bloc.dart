@@ -34,7 +34,9 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   Future<void> _onAdd(AddReviewRequest event, Emitter<ReviewState> emit) async {
     emit(ReviewLoading());
     try {
-      final result = await repo.addReview(event.newReview as AddReviewByEventResponseModel);
+      final result = await repo.addReview(
+        event.newReview as AddReviewByEventResponseModel,
+      );
       result.fold((failure) => emit(ReviewFailure(failure)), (response) {
         final d = response.data!;
         final newDatum = Datum(
@@ -65,7 +67,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       comment: event.komen,
     );
 
-    final result = await repo.updateReview(event.reviewId.toString(), req as EditReviewByIdResponseModel);
+    final result = await repo.updateReview(
+      event.reviewId.toString(),
+      req as EditReviewByIdResponseModel,
+    );
 
     result.fold((failure) => emit(ReviewFailure(failure)), (response) {
       final d = response.data!;
@@ -84,7 +89,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     DeleteReviewRequest event,
     Emitter<ReviewState> emit,
   ) async {
-    emit(ReviewLoading());
+    emit(ReviewLoading()); // tampilkan loading saat hapus
     final result = await repo.deleteReview(event.reviewId.toString());
     result.fold((failure) => emit(ReviewFailure(failure)), (_) {
       emit(DeleteReviewSuccess(event.reviewId.toString()));

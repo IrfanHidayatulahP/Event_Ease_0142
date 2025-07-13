@@ -33,14 +33,16 @@ class Data {
   final String? username;
   final String? email;
   final String? role;
+  final String? photoPath;
 
-  Data({this.id, this.username, this.email, this.role});
+  Data({this.id, this.username, this.email, this.role, this.photoPath});
 
   factory Data.fromMap(Map<String, dynamic> json) => Data(
     id: json["id"] as int?,
     username: json["username"] as String?,
     email: json["email"] as String?,
     role: json["role"] as String?,
+    photoPath: json["photo_path"] as String?,
   );
 
   Map<String, dynamic> toMap() => {

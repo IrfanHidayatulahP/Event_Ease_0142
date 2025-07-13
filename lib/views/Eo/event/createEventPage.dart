@@ -167,6 +167,11 @@ class _CreateEventPageState extends State<CreateEventPage> {
                       () => _pickDate(context, _eventEndDateController, false),
                 ),
                 const SizedBox(height: 8),
+                TextField(
+                  controller: _eventLocationController,
+                  decoration: const InputDecoration(labelText: 'Location'),
+                ),
+                const SizedBox(height: 8),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -174,11 +179,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
                     icon: const Icon(Icons.map),
                     label: const Text("Pilih Lokasi di Map"),
                   ),
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _eventLocationController,
-                  decoration: const InputDecoration(labelText: 'Location'),
                 ),
                 const SizedBox(height: 16),
                 BlocBuilder<EventBloc, EventState>(

@@ -1,3 +1,4 @@
+import 'package:event_ease/views/maps/mapPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_ease/data/model/response/eo/event/getEventResponse.dart';
@@ -31,6 +32,19 @@ class _EditEventPageState extends State<EditEventPage> {
     _descController.dispose();
     _locationController.dispose();
     super.dispose();
+  }
+
+  Future<void> _navigateToMapPage() async {
+    final pickedAddress = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const MapPage()),
+    );
+
+    if (pickedAddress != null && pickedAddress is String) {
+      setState(() {
+        _locationController.text = pickedAddress;
+      });
+    }
   }
 
   void _saveChanges() {
@@ -92,6 +106,15 @@ class _EditEventPageState extends State<EditEventPage> {
               TextField(
                 controller: _locationController,
                 decoration: const InputDecoration(labelText: 'Location'),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: _navigateToMapPage,
+                  icon: const Icon(Icons.map),
+                  label: const Text("Pilih Lokasi di Map"),
+                ),
               ),
               const SizedBox(height: 24),
               Center(

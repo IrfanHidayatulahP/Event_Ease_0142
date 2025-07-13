@@ -91,7 +91,7 @@ class ReviewRepository {
     String eventId,
   ) async {
     try {
-      final resp = await _client.get('events/$eventId/reviews');
+      final resp = await _client.get('event/reviews/$eventId');
       final body = json.decode(resp.body);
 
       if (resp.statusCode == 200 && body['status'] == 'success') {

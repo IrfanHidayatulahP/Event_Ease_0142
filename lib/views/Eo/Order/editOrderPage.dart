@@ -14,24 +14,30 @@ class EditOrderPage extends StatefulWidget {
 }
 
 class _EditOrderPageState extends State<EditOrderPage> {
-  late TextEditingController _statusController;
   late TextEditingController _jumlahTiketController;
   late TextEditingController _totalHargaController;
   late TextEditingController _tanggalPesanController;
+
+  final List<String> _statusOptions = [
+    'pending',
+    'paid',
+    'cancelled',
+  ]; // Sesuaikan opsi status
+  late String _selectedStatus;
   bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
-    // Inisialisasi controller dengan nilai dari widget.order
-    _statusController = TextEditingController(text: widget.order.status);
+
+    _selectedStatus = widget.order.status!;
+
     _jumlahTiketController = TextEditingController(
       text: widget.order.jumlahTiket.toString(),
     );
     _totalHargaController = TextEditingController(
       text: widget.order.totalHarga.toString(),
     );
-
     final DateTime tanggal = widget.order.tanggalPemesanan!;
     _tanggalPesanController = TextEditingController(
       text: tanggal.toIso8601String(),
@@ -40,7 +46,6 @@ class _EditOrderPageState extends State<EditOrderPage> {
 
   @override
   void dispose() {
-    _statusController.dispose();
     _jumlahTiketController.dispose();
     _totalHargaController.dispose();
     _tanggalPesanController.dispose();
@@ -51,10 +56,9 @@ class _EditOrderPageState extends State<EditOrderPage> {
     setState(() => _isSaving = true);
     final bloc = context.read<OrderBloc>();
 
-    // Positional args sesuai event signature
     final int? userId = widget.order.userId;
     final int? tiketKategoriId = widget.order.tiketKategoriId;
-    final String status = _statusController.text;
+    final String status = _selectedStatus;
     final int jumlahTiket = int.parse(_jumlahTiketController.text);
     final double totalHarga = double.parse(_totalHargaController.text);
     final DateTime tanggalPemesanan = DateTime.parse(
@@ -68,7 +72,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
         status,
         jumlahTiket,
         totalHarga,
-        tanggalPemesanan, 
+        tanggalPemesanan,
         orderId: widget.order.id!.toInt(),
       ),
     );
@@ -98,9 +102,21 @@ class _EditOrderPageState extends State<EditOrderPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TextField(
-                controller: _statusController,
+              DropdownButtonFormField<String>(
+                value: _selectedStatus,
                 decoration: const InputDecoration(labelText: 'Status Order'),
+                items:
+                    _statusOptions.map((String status) {
+                      return DropdownMenuItem(
+                        value: status,
+                        child: Text(status),
+                      );
+                    }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    setState(() => _selectedStatus = value);
+                  }
+                },
               ),
               const SizedBox(height: 16),
               TextField(

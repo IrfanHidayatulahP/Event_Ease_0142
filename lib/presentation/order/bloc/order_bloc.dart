@@ -16,6 +16,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     on<FetchOrderByUserRequested>(_onFetchUser);
     on<AddOrderRequested>(_onAdd);
     on<UpdateOrderRequested>(_onUpdate);
+    on<UpdateOrderStatusRequested>(_onUpdateStatus);
     on<DeleteOrderRequested>(_onDelete);
   }
 
@@ -92,6 +93,51 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
         emit(OrderUpdateSuccess(updatedOrder));
       },
     );
+  }
+
+  Future<void> _onUpdateStatus(
+    UpdateOrderStatusRequested event,
+    Emitter<OrderState> emit,
+  ) async {
+    emit(OrderLoading());
+
+    final existingResult = await repo.fetchOrderById(event.orderId.toString());
+
+    await existingResult.fold((failure) async => emit(OrderFailure(failure)), (
+      orderData,
+    ) async {
+      final data = orderData.data!;
+      final updatedReq = EditOrderRequestModel(
+        userId: data.userId!,
+        tiketKategoriId: data.tiketKategoriId!,
+        jumlahTiket: data.jumlahTiket!,
+        totalHarga: data.totalHarga!.toString(),
+        tanggalPemesanan: data.tanggalPemesanan!,
+        status: event.newStatus,
+      );
+
+      final updateResult = await repo.updateOrder(
+        event.orderId.toString(),
+        updatedReq,
+      );
+
+      updateResult.fold((failure) => emit(OrderFailure(failure)), (res) {
+        final d = res.data!;
+        emit(
+          OrderUpdateSuccess(
+            Order(
+              id: d.id,
+              userId: d.userId,
+              tiketKategoriId: d.tiketKategoriId,
+              jumlahTiket: d.jumlahTiket,
+              totalHarga: d.totalHarga,
+              tanggalPemesanan: d.tanggalPemesanan,
+              status: d.status,
+            ),
+          ),
+        );
+      });
+    });
   }
 
   Future<void> _onDelete(

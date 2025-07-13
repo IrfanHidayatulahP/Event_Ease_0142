@@ -20,6 +20,10 @@ class _OrderByUserPageState extends State<OrderByUserPage> {
   @override
   void initState() {
     super.initState();
+    _fetchOrders();
+  }
+
+  void _fetchOrders() {
     context.read<OrderBloc>().add(FetchOrderByUserRequested(widget.user.id!));
   }
 
@@ -54,14 +58,16 @@ class _OrderByUserPageState extends State<OrderByUserPage> {
 
                 return InkWell(
                   borderRadius: BorderRadius.circular(12),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final shouldRefresh = await Navigator.push<bool>(
                       context,
                       MaterialPageRoute(
-                        builder:
-                            (context) => DetailOrderUserPage(order: order),
+                        builder: (_) => DetailOrderUserPage(order: order),
                       ),
                     );
+                    if (shouldRefresh == true) {
+                      _fetchOrders();
+                    }
                   },
                   child: Card(
                     elevation: 4,

@@ -35,6 +35,13 @@ class UpdateOrderRequested extends OrderEvent {
   });
 }
 
+class UpdateOrderStatusRequested extends OrderEvent {
+  final int orderId;
+  final String newStatus;
+
+  UpdateOrderStatusRequested({required this.orderId, required this.newStatus});
+}
+
 class DeleteOrderRequested extends OrderEvent {
   final String orderId;
   DeleteOrderRequested({required this.orderId});

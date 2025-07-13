@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:event_ease/data/model/request/eo/profile/editProfileRequest.dart';
 import 'package:event_ease/data/repository/profileRepository.dart';
@@ -40,7 +42,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       username: event.username,
       email: event.email,
       photoPath: event.photoPath,
+      photoFile: event.photoFile,
     );
+
     final result = await repo.updateProfile(requestModel);
 
     result.fold(

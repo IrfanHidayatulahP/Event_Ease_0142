@@ -5,6 +5,7 @@ import 'package:event_ease/data/repository/profileRepository.dart';
 import 'package:event_ease/data/repository/reviewRepository.dart';
 import 'package:event_ease/data/repository/ticketRepository.dart';
 import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
+import 'package:event_ease/presentation/cameras/bloc/camera_bloc.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 import 'package:event_ease/presentation/order/bloc/order_bloc.dart';
 import 'package:event_ease/presentation/profile/bloc/profile_bloc.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ReviewBloc(ReviewRepository(serviceHttpClient)),
         ),
+        BlocProvider(create: (context) => CameraBloc()),
       ],
       child: MaterialApp(
         title: 'Event Ease',
@@ -56,9 +58,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         ),
         initialRoute: '/login',
-        routes: {
-          '/login': (context) => const LoginPage(),
-        },
+        routes: {'/login': (context) => const LoginPage()},
       ),
     );
   }

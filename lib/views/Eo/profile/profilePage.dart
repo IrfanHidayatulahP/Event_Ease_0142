@@ -13,7 +13,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
   @override
   void initState() {
     super.initState();
@@ -24,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -45,10 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'My Profile',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 16),
             Expanded(
               child: BlocBuilder<ProfileBloc, ProfileState>(
@@ -59,38 +54,43 @@ class _ProfilePageState extends State<ProfilePage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundImage: NetworkImage(
-                            state.photoPath.isNotEmpty
-                                ? state.photoPath
-                                : 'https://via.placeholder.com/150',
+                        Center(
+                          child: CircleAvatar(
+                            radius: 60,
+                            backgroundImage:
+                                state.photoPath.isNotEmpty
+                                    ? NetworkImage(
+                                      'https://example.com/uploads/profile/${state.photoPath}',
+                                    )
+                                    : const NetworkImage(
+                                      'https://via.placeholder.com/150',
+                                    ),
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Text('Username: ${state.username}'),
-                        Text('Email: ${state.email}'),
+                        Text(
+                          'Username: ${state.username}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Text(
+                          'Email: ${state.email}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ],
                     );
                   } else if (state is ProfileFailure) {
                     return Center(child: Text('Error: ${state.error}'));
                   }
-                  return const Center(child: Text('No profile data'));
+
+                  return const Center(
+                    child: Text('No profile data available.'),
+                  );
                 },
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildProfile(ProfileLoadSuccess s) {
-    return Column(
-      children: [
-        Text('Username: ${s.username}'),
-        Text('Email: ${s.email}'),
-      ],
     );
   }
 }

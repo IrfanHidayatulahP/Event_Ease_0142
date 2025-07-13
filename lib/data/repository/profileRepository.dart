@@ -32,21 +32,16 @@ class ProfileRepository {
   Future<Either<String, EditProfileResponseModel>> updateProfile(
     EditProfileRequestModel model,
   ) async {
-    print('>>> updateProfile: start');
     try {
       final resp = await _client.putWithToken('profile/edit', model.toMap());
-      print('>>> HTTP status: ${resp.statusCode}');
       if (resp.statusCode == 200) {
         final jsonBody = json.decode(resp.body) as Map<String, dynamic>;
         final data = EditProfileResponseModel.fromMap(jsonBody);
-        print('>>> parsed response OK');
         return Right(data);
       } else {
-        print('>>> error status: ${resp.statusCode}');
         return Left('Server error: ${resp.statusCode}');
       }
-    } catch (e, st) {
-      print('>>> exception: $e\n$st');
+    } catch (e) {
       return Left('Exception: $e');
     }
   }

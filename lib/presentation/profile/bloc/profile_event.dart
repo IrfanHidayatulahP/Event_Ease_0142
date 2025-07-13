@@ -7,11 +7,13 @@ final class FetchProfileRequested extends ProfileEvent {}
 final class UpdateProfileRequested extends ProfileEvent {
   final String username;
   final String email;
-  final String photoPath;
+  final String photoPath; // opsional
+  final File? photoFile;
 
   UpdateProfileRequested({
     required this.username,
     required this.email,
-    required this.photoPath,
+    this.photoPath = '',
+    this.photoFile,
   });
 }

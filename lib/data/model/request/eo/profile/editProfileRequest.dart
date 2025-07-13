@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 class EditProfileRequestModel {
   final String? username;
@@ -14,7 +15,7 @@ class EditProfileRequestModel {
     this.photoPath,
     this.role,
     this.createdAt,
-    this.updatedAt,
+    this.updatedAt, File? photoFile,
   });
 
   factory EditProfileRequestModel.fromJson(String str) =>

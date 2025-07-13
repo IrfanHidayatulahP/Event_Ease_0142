@@ -1,5 +1,6 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
+import 'package:event_ease/presentation/images/bloc/images_bloc.dart';
 import 'package:event_ease/views/Eo/event/createEventPage.dart';
 import 'package:event_ease/views/Eo/event/eventDetailPage.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class _EventPageState extends State<EventPage> {
   void initState() {
     super.initState();
     context.read<EventBloc>().add(FetchEventsRequested());
+    context.read<ImagesBloc>().add(FetchImages());
   }
 
   @override

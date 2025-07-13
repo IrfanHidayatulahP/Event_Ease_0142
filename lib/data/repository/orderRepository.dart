@@ -8,6 +8,7 @@ import 'package:event_ease/data/model/response/eo/orders/deleteOrderResponse.dar
 import 'package:event_ease/data/model/response/eo/orders/editOrderResponse.dart';
 import 'package:event_ease/data/model/response/eo/orders/getAllOrdersResponse.dart';
 import 'package:event_ease/data/model/response/eo/orders/getOrderByIdResponse.dart';
+import 'package:event_ease/data/model/response/eo/orders/getOrderByUserIdResponse.dart';
 import 'package:event_ease/services/service_http_client.dart';
 
 class OrderRepository {
@@ -63,6 +64,23 @@ class OrderRepository {
       }
     } catch (e) {
       return Left('Error fetching order by ID: $e');
+    }
+  }
+
+  Future<Either<String, GetOrderByUserIdResponseModel>> fetchOrderByUserId(
+    String id,
+  ) async {
+    try {
+      final resp = await _client.get('users/orders/$id');
+      final body = json.decode(resp.body);
+
+      if (resp.statusCode == 200 && body['status'] == 'success') {
+        return Right(GetOrderByUserIdResponseModel.fromMap(body));
+      } else {
+        return Left(body['message'] ?? 'Failed to fetch order by User');
+      }
+    } catch (e) {
+      return Left('Error fetching order by User: $e');
     }
   }
 

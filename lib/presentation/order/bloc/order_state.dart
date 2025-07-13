@@ -11,6 +11,11 @@ final class OrderLoadSuccess extends OrderState {
   OrderLoadSuccess(this.orders);
 }
 
+final class OrderLoadByUserSuccess extends OrderState {
+  final List<History> hist;
+  OrderLoadByUserSuccess(this.hist);
+}
+
 final class OrderUpdateSuccess extends OrderState {
   final Order editOrder;
   OrderUpdateSuccess(this.editOrder);

@@ -1,8 +1,8 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
+import 'package:event_ease/views/Eo/Order/orderByUserPage.dart';
 import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
 import 'package:event_ease/views/User/components/userNavBar.dart';
-import 'package:event_ease/views/Eo/Order/orderPage.dart';
 import 'package:event_ease/views/Eo/event/eventPage.dart';
 import 'package:event_ease/views/Eo/profile/profilePage.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class _UserHomePageState extends State<UserHomePage> {
     _pages = [
       _buildDashboardView(),
       EventPage(user: widget.user),
-      OrderPage(user: widget.user),
+      OrderByUserPage(user: widget.user),
       ProfilePage(user: widget.user),
     ];
   }

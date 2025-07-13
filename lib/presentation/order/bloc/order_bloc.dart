@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:event_ease/data/model/request/eo/orders/editOrderRequest.dart';
 import 'package:event_ease/data/model/response/eo/orders/getAllOrdersResponse.dart';
+import 'package:event_ease/data/model/response/eo/orders/getOrderByUserIdResponse.dart';
 import 'package:event_ease/data/repository/orderRepository.dart';
 
 part 'order_event.dart';
@@ -11,6 +12,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   OrderBloc(this.repo) : super(OrderInitial()) {
     on<FetchOrderRequested>(_onFetch);
+    on<FetchOrderByUserRequested>(_onFetchUser);
     on<UpdateOrderRequested>(_onUpdate);
     on<DeleteOrderRequested>(_onDelete);
   }
@@ -24,6 +26,18 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     result.fold(
       (failure) => emit(OrderFailure(failure)),
       (response) => emit(OrderLoadSuccess(response.data ?? [])),
+    );
+  }
+
+  Future<void> _onFetchUser(
+    FetchOrderByUserRequested event,
+    Emitter<OrderState> emit,
+  ) async {
+    emit(OrderLoading());
+    final result = await repo.fetchOrderByUserId(event.userId.toString());
+    result.fold(
+      (failure) => emit(OrderFailure(failure)),
+      (response) => emit(OrderLoadByUserSuccess(response.data ?? [])),
     );
   }
 
@@ -44,10 +58,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     );
 
     // Panggil updateOrder dengan EditOrderRequestModel, bukan cast aneh‑aneh
-    final result = await repo.updateOrder(
-      event.orderId.toString(),
-      req,
-    );
+    final result = await repo.updateOrder(event.orderId.toString(), req);
 
     result.fold(
       (failure) {

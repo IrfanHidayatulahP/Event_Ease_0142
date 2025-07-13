@@ -4,6 +4,12 @@ sealed class OrderEvent {}
 
 class FetchOrderRequested extends OrderEvent {}
 
+class FetchOrderByUserRequested extends OrderEvent {
+  final int userId;
+
+  FetchOrderByUserRequested(this.userId);
+}
+
 class UpdateOrderRequested extends OrderEvent {
   final int orderId;
   final int userId;

@@ -1,15 +1,13 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/order/bloc/order_bloc.dart';
 import 'package:event_ease/views/Eo/Order/detailOrderPage.dart';
-import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
-import 'package:event_ease/views/Eo/components/CustomNavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class OrderPage extends StatefulWidget {
   final Data user;
-  const OrderPage({Key? key, required this.user}) : super(key: key);
+  const OrderPage({super.key, required this.user});
 
   @override
   State<OrderPage> createState() => _OrderPageState();
@@ -17,7 +15,6 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   final DateFormat _dateFmt = DateFormat('dd MMM yyyy, HH:mm');
-  int _selectedIndex = 2;
 
   @override
   void initState() {
@@ -28,7 +25,6 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(user: widget.user),
       body: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
           if (state is OrderLoading) {
@@ -107,11 +103,6 @@ class _OrderPageState extends State<OrderPage> {
           }
           return const SizedBox.shrink();
         },
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        user: widget.user,
-        selectedIndex: _selectedIndex,
-        onItemSelected: (idx) => setState(() => _selectedIndex = idx),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:event_ease/data/model/auth/loginRequest.dart';
 import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
-import 'package:event_ease/views/Eo/dashboardPage.dart';
+import 'package:event_ease/views/Eo/eoHomePage.dart';
 import 'package:event_ease/views/User/userHomePage.dart';
 import 'package:event_ease/views/registerPage.dart';
 import 'package:flutter/gestures.dart';
@@ -112,13 +112,13 @@ class _LoginPageState extends State<LoginPage> {
                       if (role == 'EO') {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (_) => DashboardPage(user: user),
+                            builder: (_) => EoHomePage(user: user),
                           ),
                         );
                       } else if (role == 'USER') {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (_) => const UserHomePage(),
+                            builder: (_) => UserHomePage(user: user),
                           ),
                         );
                       } else {

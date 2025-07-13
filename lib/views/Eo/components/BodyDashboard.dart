@@ -1,11 +1,12 @@
 // lib/views/eo/widgets/event_list_body.dart
+import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/views/Eo/components/EventCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 
 class BodyDashboard extends StatelessWidget {
-  const BodyDashboard({super.key});
+  const BodyDashboard({super.key, required Data user});
 
   @override
   Widget build(BuildContext context) {

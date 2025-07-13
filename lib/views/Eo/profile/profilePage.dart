@@ -1,6 +1,5 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/profile/bloc/profile_bloc.dart';
-import 'package:event_ease/views/Eo/components/CustomNavBar.dart';
 import 'package:event_ease/views/Eo/profile/editProfilePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +13,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 3; // Profile menu aktif
 
   @override
   void initState() {
@@ -83,13 +81,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        user: widget.user, // ← pass the user here
-        selectedIndex: _selectedIndex,
-        onItemSelected: (idx) {
-          setState(() => _selectedIndex = idx);
-        },
       ),
     );
   }

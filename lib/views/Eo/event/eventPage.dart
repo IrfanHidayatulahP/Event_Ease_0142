@@ -1,9 +1,5 @@
-// lib/views/eo/event_page.dart
-
 import 'package:event_ease/data/model/auth/loginResponse.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
-import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
-import 'package:event_ease/views/Eo/components/CustomNavBar.dart';
 import 'package:event_ease/views/Eo/event/createEventPage.dart';
 import 'package:event_ease/views/Eo/event/eventDetailPage.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +15,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-  int _selectedIndex = 1; // Event menu aktif
 
   @override
   void initState() {
@@ -30,9 +25,6 @@ class _EventPageState extends State<EventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /// ← Pass the real user in here:
-      appBar: CustomAppBar(user: widget.user),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -146,13 +138,6 @@ class _EventPageState extends State<EventPage> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavBar(
-        user: widget.user,
-        selectedIndex: _selectedIndex,
-        onItemSelected: (idx) {
-          setState(() => _selectedIndex = idx);
-        },
       ),
     );
   }

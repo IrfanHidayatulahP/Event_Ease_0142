@@ -15,7 +15,6 @@ class EventPage extends StatefulWidget {
 }
 
 class _EventPageState extends State<EventPage> {
-
   @override
   void initState() {
     super.initState();
@@ -41,9 +40,12 @@ class _EventPageState extends State<EventPage> {
                     icon: const Icon(Icons.add_circle_outline, size: 28),
                     onPressed: () {
                       // Navigate to create event page
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => CreateEventPage(),
-                      ));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateEventPage(),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -70,7 +72,8 @@ class _EventPageState extends State<EventPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EventDetailPage(event: event),
+                                builder:
+                                    (context) => EventDetailPage(event: event),
                               ),
                             );
                           },

@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:event_ease/data/model/request/eo/orders/addOrderRequest.dart';
 import 'package:event_ease/data/model/request/eo/orders/editOrderRequest.dart';
 import 'package:event_ease/data/model/response/eo/orders/getAllOrdersResponse.dart';
 import 'package:event_ease/data/model/response/eo/orders/getOrderByUserIdResponse.dart';
@@ -13,6 +14,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   OrderBloc(this.repo) : super(OrderInitial()) {
     on<FetchOrderRequested>(_onFetch);
     on<FetchOrderByUserRequested>(_onFetchUser);
+    on<AddOrderRequested>(_onAdd);
     on<UpdateOrderRequested>(_onUpdate);
     on<DeleteOrderRequested>(_onDelete);
   }
@@ -39,6 +41,17 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       (failure) => emit(OrderFailure(failure)),
       (response) => emit(OrderLoadByUserSuccess(response.data ?? [])),
     );
+  }
+
+  Future<void> _onAdd(AddOrderRequested event, Emitter<OrderState> emit) async {
+    emit(OrderLoading());
+
+    final result = await repo.addOrder(event.request);
+
+    result.fold((failure) => emit(OrderFailure(failure)), (response) {
+      // Optional: bisa emit success atau langsung fetch ulang
+      add(FetchOrderByUserRequested(event.request.userId!));
+    });
   }
 
   Future<void> _onUpdate(

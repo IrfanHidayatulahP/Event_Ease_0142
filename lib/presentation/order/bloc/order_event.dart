@@ -10,6 +10,11 @@ class FetchOrderByUserRequested extends OrderEvent {
   FetchOrderByUserRequested(this.userId);
 }
 
+class AddOrderRequested extends OrderEvent {
+  final AddOrderRequestModel request;
+  AddOrderRequested({required this.request});
+}
+
 class UpdateOrderRequested extends OrderEvent {
   final int orderId;
   final int userId;

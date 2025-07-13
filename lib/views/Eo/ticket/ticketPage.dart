@@ -56,7 +56,7 @@ class _TicketPageState extends State<TicketPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tickets for Event #${widget.eventId}')),
+      appBar: AppBar(title: Text('Tickets for Event ${widget.eventId}')),
       body: BlocBuilder<TicketBloc, TicketState>(
         builder: (context, state) {
           if (state is TicketLoading) {

@@ -1,5 +1,6 @@
 import 'package:event_ease/data/model/request/eo/event/addEventRequest.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
+import 'package:event_ease/views/maps/mapPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,7 +84,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
       return;
     }
 
-    // Dispatch event with proper DateTime objects
     context.read<EventBloc>().add(
       AddEventRequested(
         request: AddEventRequest(
@@ -97,6 +97,19 @@ class _CreateEventPageState extends State<CreateEventPage> {
     );
   }
 
+  Future<void> _navigateToMapPage() async {
+    final pickedAddress = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const MapPage()),
+    );
+
+    if (pickedAddress != null && pickedAddress is String) {
+      setState(() {
+        _eventLocationController.text = pickedAddress;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<EventBloc, EventState>(
@@ -105,7 +118,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Event created successfully!')),
           );
-          // Clear fields
           _eventNameController.clear();
           _eventDescriptionController.clear();
           _eventStartDateController.clear();
@@ -113,7 +125,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
           _eventLocationController.clear();
           _selectedStartDate = null;
           _selectedEndDate = null;
-          // Navigate back after creation
           Navigator.pop(context);
         } else if (state is EventFailure) {
           ScaffoldMessenger.of(
@@ -154,6 +165,15 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   decoration: const InputDecoration(labelText: 'End Date'),
                   onTap:
                       () => _pickDate(context, _eventEndDateController, false),
+                ),
+                const SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _navigateToMapPage,
+                    icon: const Icon(Icons.map),
+                    label: const Text("Pilih Lokasi di Map"),
+                  ),
                 ),
                 const SizedBox(height: 8),
                 TextField(

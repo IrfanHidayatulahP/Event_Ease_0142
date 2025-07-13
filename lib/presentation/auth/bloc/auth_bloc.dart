@@ -10,9 +10,10 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 
-  AuthBloc({ required this.authRepository }) : super(AuthInitial()) {
+  AuthBloc({required this.authRepository}) : super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
     on<RegisterRequested>(_onRegisterRequested);
+    on<LogoutRequested>(_onLogoutRequested);
   }
 
   Future<void> _onLoginRequested(
@@ -41,5 +42,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (l) => emit(RegisterFailure(error: l)),
       (r) => emit(RegisterSuccess(message: r)),
     );
+  }
+
+  Future<void> _onLogoutRequested(
+    LogoutRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      await authRepository.logout();
+      emit(LogoutSuccess(message: 'Berhasil logout'));
+    } catch (e) {
+      emit(AuthFailure(error: 'Gagal logout: $e'));
+    }
   }
 }

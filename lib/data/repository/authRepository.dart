@@ -55,4 +55,8 @@ class AuthRepository {
       return Left('Error saat registrasi: $e');
     }
   }
+
+  Future<void> logout() async {
+    await _secureStorage.delete(key: 'AuthToken');
+  }
 }

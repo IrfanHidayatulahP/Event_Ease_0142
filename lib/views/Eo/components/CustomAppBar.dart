@@ -1,10 +1,12 @@
-// lib/views/eo/widgets/custom_app_bar.dart
-import 'package:flutter/material.dart';
 import 'package:event_ease/data/model/auth/loginResponse.dart';
+import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Data user;
-  const CustomAppBar({super.key, required this.user});
+  final bool isUser;
+  const CustomAppBar({super.key, required this.user, this.isUser = false});
 
   @override
   Widget build(BuildContext context) {
@@ -44,28 +46,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
             ),
-            Stack(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none,
-                    color: Colors.black,
-                    size: 28,
-                  ),
-                  onPressed: () {},
-                ),
-                const Positioned(
-                  right: 10,
-                  top: 12,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: SizedBox(width: 8, height: 8),
-                  ),
-                ),
-              ],
+            IconButton(
+              icon: const Icon(Icons.logout, color: Colors.black, size: 28),
+              onPressed: () {
+                context.read<AuthBloc>().add(LogoutRequested());
+              },
             ),
           ],
         ),

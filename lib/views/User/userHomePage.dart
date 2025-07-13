@@ -1,4 +1,5 @@
 import 'package:event_ease/data/model/auth/loginResponse.dart';
+import 'package:event_ease/presentation/auth/bloc/auth_bloc.dart';
 import 'package:event_ease/presentation/events/bloc/event_bloc.dart';
 import 'package:event_ease/views/Eo/Order/orderByUserPage.dart';
 import 'package:event_ease/views/Eo/components/CustomAppBar.dart';
@@ -95,13 +96,26 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(user: widget.user),
-      body: IndexedStack(index: _selectedIndex, children: _pages),
-      bottomNavigationBar: UserNavBar(
-        selectedIndex: _selectedIndex,
-        onItemSelected: _handleNavigation,
-        user: widget.user,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LogoutSuccess) {
+          Navigator.of(
+            context,
+          ).pushNamedAndRemoveUntil('/login', (route) => false);
+        } else if (state is AuthFailure) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      child: Scaffold(
+        appBar: CustomAppBar(user: widget.user, isUser: true),
+        body: IndexedStack(index: _selectedIndex, children: _pages),
+        bottomNavigationBar: UserNavBar(
+          selectedIndex: _selectedIndex,
+          onItemSelected: _handleNavigation,
+          user: widget.user,
+        ),
       ),
     );
   }

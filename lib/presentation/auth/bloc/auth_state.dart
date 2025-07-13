@@ -8,25 +8,30 @@ final class AuthLoading extends AuthState {}
 
 final class AuthSuccess extends AuthState {
   final LoginResponseModel responseModel;
-
-  AuthSuccess({ required this.responseModel });
+  AuthSuccess({required this.responseModel});
 }
 
 final class AuthFailure extends AuthState {
   final String error;
 
-  AuthFailure({ required this.error });
+  AuthFailure({required this.error});
+}
+
+final class LogoutSuccess extends AuthState {
+  final String message;
+
+  LogoutSuccess({required this.message});
 }
 
 // Tambahkan state untuk register
 final class RegisterSuccess extends AuthState {
   final String message;
 
-  RegisterSuccess({ required this.message });
+  RegisterSuccess({required this.message});
 }
 
 final class RegisterFailure extends AuthState {
   final String error;
 
-  RegisterFailure({ required this.error });
+  RegisterFailure({required this.error});
 }

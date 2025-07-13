@@ -14,3 +14,5 @@ class RegisterRequested extends AuthEvent {
 
   RegisterRequested({ required this.requestModel });
 }
+
+class LogoutRequested extends AuthEvent {} 
